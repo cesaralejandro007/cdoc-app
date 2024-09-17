@@ -1,24 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+// src/App.js
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import HomePage from './components/HomePage';
+import Login from './components/Login';
+import PrivateRoute from './routes/PrivateRoute';
+import ModuleRoutes from './routes/ModuleRoutes'; // Mantén este archivo si quieres usarlo
+
+function isAuthenticated() {
+  const token = localStorage.getItem('token');
+  return token !== null;
+}
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/Login" element={<Login />} />
+        {/* Ruta protegida para HomePage */}
+        <Route 
+          path="/HomePage/*" 
+          element={
+  
+              <HomePage />
+        
+          }
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          <Route path="modules/*" element={<ModuleRoutes />} />
+        </Route>
+      </Routes>
+    </Router>
   );
 }
 
