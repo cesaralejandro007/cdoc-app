@@ -2,9 +2,9 @@
 import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Box, CssBaseline } from '@mui/material';
-import Sidebar from './Sidebar';
-import Header from './Header';
-import Footer from './Footer';
+import Sidebar from './sidebar/Sidebar';
+import Header from './header/Header';
+import Footer from './footer/Footer';
 
 const HomePage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);

@@ -1,12 +1,12 @@
 // src/components/Login.js
 import React, { useState } from "react";
 import { TextField, Button, Typography, Container, Alert, Box } from "@mui/material";
-import useLogin from "../hooks/useAuth"; // Importa el hook personalizado
+import useLogin from "../hooks/useAuth"; /// Asegúrate de que la ruta esté correcta
 
 const Login = () => {
   const [cedula, setCedula] = useState("");
   const [password, setPassword] = useState("");
-  const { login, error, loading } = useLogin(); // Usa el hook personalizado
+  const { login, error, loading } = useLogin();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -21,25 +21,19 @@ const Login = () => {
       minHeight="100vh"
       flexDirection="column"
     >
-    {/* Imagen fuera del borde */}
-        <img
-        src="/seniat.png" // Ruta correcta si la imagen está en public/assets
+      <img
+        src="/seniat.png"
         alt="Seniat"
-        style={{
-        width: "400px",
-        height: "auto",
-        marginBottom: "16px",
-        }}
-        />
-      {/* Título fuera del borde */}
+        style={{ width: "400px", height: "auto", marginBottom: "16px" }}
+      />
       <Typography
         variant="h4"
         component="h4"
         sx={{
           textAlign: "center",
-          fontFamily: "'Inter', sans-serif", // Ajuste en la fuente
+          fontFamily: "'Inter', sans-serif",
           fontWeight: "bold",
-          textShadow: "3px 3px 3px rgba(0, 0, 0, 0.5)", // Agrega una sombra ligera
+          textShadow: "3px 3px 3px rgba(0, 0, 0, 0.5)",
         }}
       >
         Control de Documentos
@@ -49,20 +43,20 @@ const Login = () => {
         component="main"
         maxWidth="xs"
         sx={{
-          border: "1px solid #BEBEBE", // Borde del contenedor
-          borderRadius: "8px", // Bordes redondeados
-          padding: "24px", // Espaciado interno
-          boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.5)", // Agrega una sombra ligera
-          marginTop: "16px", // Espaciado entre el título y el contenedor
+          width: "400px",
+          border: "1px solid #BEBEBE",
+          borderRadius: "8px",
+          padding: "24px",
+          boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.5)",
+          marginTop: "16px",
         }}
       >
-        {/* Título dentro del contenedor */}
         <Typography variant="h5" component="h5" gutterBottom sx={{ textAlign: "center" }}>
-         Inicia Sesión
+          Inicia Sesión
         </Typography>
 
         {error && <Alert severity="error">{error}</Alert>}
-        
+
         <form onSubmit={handleSubmit} noValidate>
           <TextField
             margin="normal"

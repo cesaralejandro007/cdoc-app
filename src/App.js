@@ -18,12 +18,12 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/Login" element={<Login />} />
         {/* Ruta protegida para HomePage */}
-        <Route 
-          path="/HomePage/*" 
+        <Route
+          path="/home/*"
           element={
-  
+            <PrivateRoute isAuthenticated={isAuthenticated()}>
               <HomePage />
-        
+            </PrivateRoute>
           }
         >
           <Route path="modules/*" element={<ModuleRoutes />} />
