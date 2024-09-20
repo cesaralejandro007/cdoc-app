@@ -19,7 +19,18 @@ const Sidebar = ({ open }) => {
 
   // Función para saber si la opción está activa (ruta actual)
   const isActive = (path) => location.pathname === path;
-  
+
+  const documentItems = [
+    { to: "/home/modules/doc-entry", text: "Doc. de entrada", icon: <Input /> },
+    { to: "/home/modules/doc-exit", text: "Doc. de salida", icon: <ExitToApp /> },
+    { to: "/home/modules/doc-without-entry", text: "Doc. sin entrada", icon: <Cancel /> },
+  ];
+
+  const configItems = [
+    { to: "/home/modules/log-user", text: "Bitacora de usuario", icon: <History /> },
+    { to: "/home/modules/log-system", text: "Bitacora del sistema", icon: <EventNote /> }
+  ];
+
   return (
     <Drawer
       variant="persistent"
@@ -53,7 +64,7 @@ const Sidebar = ({ open }) => {
 
         {/* Inicio */}
         <ListItem
-          button
+            button="true"
           component={Link}
           to="/home"
           sx={{
@@ -70,7 +81,7 @@ const Sidebar = ({ open }) => {
         </ListItem>
 
         {/* Menú desplegable de Documentos */}
-        <ListItem button onClick={handleDocumentsClick}>
+        <ListItem sx={{ cursor: 'pointer' }} button="true" onClick={handleDocumentsClick}>
           <ListItemIcon sx={{ color: '#ffffff' }}>
             <Description />
           </ListItemIcon>
@@ -81,59 +92,30 @@ const Sidebar = ({ open }) => {
         {/* Submenú colapsable de Documentos */}
         <Collapse in={isDocumentsOpen} timeout="auto" unmountOnExit>
           <List component="div" disablePadding sx={{ paddingLeft: 4 }}>
-            <ListItem
-              button
-              component={Link}
-              to="modules/doc-entry"
-              sx={{
-                backgroundColor: isActive('/home/modules/doc-entry') ? '#1E88E5' : 'inherit',
-                '&:hover': {
-                  backgroundColor: '#1E88E5', // Color al pasar el ratón por encima
-                }
-              }}
-            >
-              <ListItemIcon sx={{ color: '#ffffff' }}>
-                <Input />
-              </ListItemIcon>
-              <ListItemText primary="Doc. de entrada" sx={{ color: '#ffffff' }} />
-            </ListItem>
-            <ListItem
-              button
-              component={Link}
-              to="modules/doc-exit"
-              sx={{
-                backgroundColor: isActive('/home/modules/doc-exit') ? '#1E88E5' : 'inherit',
-                '&:hover': {
-                  backgroundColor: '#1E88E5', // Color al pasar el ratón por encima
-                }
-              }}
-            >
-              <ListItemIcon sx={{ color: '#ffffff' }}>
-                <ExitToApp />
-              </ListItemIcon>
-              <ListItemText primary="Doc. de salida" sx={{ color: '#ffffff' }} />
-            </ListItem>
-            <ListItem
-              button
-              component={Link}
-              to="modules/doc-without-entry"
-              sx={{
-                backgroundColor: isActive('/home/modules/doc-without-entry') ? '#1E88E5' : 'inherit',
-                '&:hover': {
-                  backgroundColor: '#1E88E5', // Color al pasar el ratón por encima
-                }
-              }}
-            >
-              <ListItemIcon sx={{ color: '#ffffff' }}>
-                <Cancel />
-              </ListItemIcon>
-              <ListItemText primary="Doc. sin entrada" sx={{ color: '#ffffff' }} />
-            </ListItem>
+            {documentItems.map((item) => (
+              <ListItem
+                key={item.to}
+                  button="true"
+                component={Link}
+                to={item.to}
+                sx={{
+                  backgroundColor: isActive(item.to) ? '#1E88E5' : 'inherit',
+                  '&:hover': {
+                    backgroundColor: '#1E88E5', // Color al pasar el ratón por encima
+                  }
+                }}
+              >
+                <ListItemIcon sx={{ color: '#ffffff' }}>
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText primary={item.text} sx={{ color: '#ffffff' }} />
+              </ListItem>
+            ))}
           </List>
         </Collapse>
 
         {/* Menú desplegable de Configuración */}
-        <ListItem button onClick={handleConfigClick}>
+        <ListItem sx={{ cursor: 'pointer' }} button="true" onClick={handleConfigClick}>
           <ListItemIcon sx={{ color: '#ffffff' }}>
             <Settings />
           </ListItemIcon>
@@ -144,44 +126,31 @@ const Sidebar = ({ open }) => {
         {/* Submenú colapsable de Configuración */}
         <Collapse in={isConfigOpen} timeout="auto" unmountOnExit>
           <List component="div" disablePadding sx={{ paddingLeft: 4 }}>
-            <ListItem
-              button
-              component={Link}
-              to="modules/log-user"
-              sx={{
-                backgroundColor: isActive('/home/modules/log-user') ? '#1E88E5' : 'inherit',
-                '&:hover': {
-                  backgroundColor: '#1E88E5', // Color al pasar el ratón por encima
-                }
-              }}
-            >
-              <ListItemIcon sx={{ color: '#ffffff' }}>
-                <History />
-              </ListItemIcon>
-              <ListItemText primary="Bitacora de usuario" sx={{ color: '#ffffff' }} />
-            </ListItem>
-            <ListItem
-              button
-              component={Link}
-              to="modules/log-system"
-              sx={{
-                backgroundColor: isActive('/home/modules/system-log') ? '#1E88E5' : 'inherit',
-                '&:hover': {
-                  backgroundColor: '#1E88E5', // Color al pasar el ratón por encima
-                }
-              }}
-            >
-              <ListItemIcon sx={{ color: '#ffffff' }}>
-                <EventNote />
-              </ListItemIcon>
-              <ListItemText primary="Bitacora del sistema" sx={{ color: '#ffffff' }} />
-            </ListItem>
+            {configItems.map((item) => (
+              <ListItem
+                key={item.to}
+                button="true"
+                component={Link}
+                to={item.to}
+                sx={{
+                  backgroundColor: isActive(item.to) ? '#1E88E5' : 'inherit',
+                  '&:hover': {
+                    backgroundColor: '#1E88E5', // Color al pasar el ratón por encima
+                  }
+                }}
+              >
+                <ListItemIcon sx={{ color: '#ffffff' }}>
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText primary={item.text} sx={{ color: '#ffffff' }} />
+              </ListItem>
+            ))}
           </List>
         </Collapse>
 
         {/* Usuarios */}
         <ListItem
-          button
+            button="true"
           component={Link}
           to="/home/modules/users"
           sx={{

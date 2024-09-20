@@ -1,26 +1,33 @@
-// src/components/HomePage.js
-import React, {useState,useEffect,useContext} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Box, CssBaseline } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../context/UserContext';
+import { AuthContext } from '../context/AuthContext';
 import Sidebar from './sidebar/Sidebar';
 import Header from './header/Header';
 import Footer from './footer/Footer';
 
 const HomePage = () => {
-  const { user, logout } = useContext(UserContext); // Accede al usuario y logout
+  const { user, loading } = useContext(AuthContext); // Accede al usuario y al estado de carga desde el contexto
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const navigate = useNavigate();
 
+  // Verificar si hay un usuario autenticado
   useEffect(() => {
-    if (!user) {
-      navigate('/login'); // Redirige a la página de login si no hay usuario
+    if (!loading && !user) {
+      navigate('/login'); // Redirige si no hay usuario y la carga ya ha terminado
     }
-  }, [user, navigate]);
+  }, [user, loading, navigate]);
+
+  // Control de la apertura/cierre del sidebar
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+
+  // Si la aplicación aún está cargando, puedes mostrar un loader o simplemente null
+  if (loading) {
+    return <div>Cargando...</div>; // Mostrar un mensaje de carga
+  }
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', flexDirection: 'column' }}>
@@ -31,10 +38,10 @@ const HomePage = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          marginLeft: isSidebarOpen ? '250px' : '0', // Ajusta el margen principal
-          transition: 'margin-left 0.3s', // Transición suave
+          marginLeft: isSidebarOpen ? '250px' : '0', 
+          transition: 'margin-left 0.3s', 
           padding: '20px',
-          marginTop: '64px', // Ajuste según la altura del header
+          marginTop: '64px',
         }}
       >
         <Outlet />

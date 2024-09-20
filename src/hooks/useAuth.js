@@ -2,12 +2,12 @@
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { UserContext } from '../context/UserContext'; // Importa el UserContext
+import { AuthContext } from '../context/AuthContext'; // Importa el UserContext
 
 const useLogin = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const { saveUser } = useContext(UserContext); // Usa el contexto
+  const { login_session, deleteData } = useContext(AuthContext); // Usa el contexto
   const navigate = useNavigate();
 
   const login = async (cedula, clave) => {
@@ -39,7 +39,7 @@ const useLogin = () => {
         const user = data.data.usuario;
 
         // Guarda los datos del usuario en el contexto sin localStorage
-        saveUser({ ...user, token });
+        login_session({user, token });
 
         // Mostrar alerta de inicio de sesión exitoso
         Swal.fire({
@@ -65,6 +65,7 @@ const useLogin = () => {
 
   const logout = () => {
     navigate("/login");
+    deleteData();
   };
 
   return {

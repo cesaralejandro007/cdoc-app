@@ -4,11 +4,11 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './components/HomePage';
 import Login from './components/Login';
 import ModuleRoutes from './routes/ModuleRoutes';
-import { UserProvider } from './context/UserContext'; // Importa el UserProvider
+import { AuthProvider } from './context/AuthContext'; // Importa el AuthProvider
 
 function App() {
   return (
-    <UserProvider>
+    <AuthProvider>
       <Router>
         <Routes>
           <Route path="/" element={<Login />} />
@@ -19,7 +19,7 @@ function App() {
           </Route>
         </Routes>
       </Router>
-    </UserProvider>
+    </AuthProvider>
   );
 }
 
