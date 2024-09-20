@@ -3,33 +3,23 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './components/HomePage';
 import Login from './components/Login';
-import PrivateRoute from './routes/PrivateRoute';
-import ModuleRoutes from './routes/ModuleRoutes'; // Mantén este archivo si quieres usarlo
-
-function isAuthenticated() {
-  const token = localStorage.getItem('token');
-  return token !== null;
-}
+import ModuleRoutes from './routes/ModuleRoutes';
+import { UserProvider } from './context/UserContext'; // Importa el UserProvider
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/Login" element={<Login />} />
-        {/* Ruta protegida para HomePage */}
-        <Route
-          path="/home/*"
-          element={
-            <PrivateRoute isAuthenticated={isAuthenticated()}>
-              <HomePage />
-            </PrivateRoute>
-          }
-        >
-          <Route path="modules/*" element={<ModuleRoutes />} />
-        </Route>
-      </Routes>
-    </Router>
+    <UserProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
+          {/* Ruta protegida para HomePage */}
+          <Route path="/home/*" element={<HomePage />}>
+            <Route path="modules/*" element={<ModuleRoutes />} />
+          </Route>
+        </Routes>
+      </Router>
+    </UserProvider>
   );
 }
 

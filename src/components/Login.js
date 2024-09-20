@@ -1,7 +1,7 @@
 // src/components/Login.js
 import React, { useState } from "react";
 import { TextField, Button, Typography, Container, Alert, Box } from "@mui/material";
-import useLogin from "../hooks/useAuth"; /// Asegúrate de que la ruta esté correcta
+import useLogin from "../hooks/useAuth"; // Asegúrate de que la ruta esté correcta
 
 const Login = () => {
   const [cedula, setCedula] = useState("");
@@ -20,12 +20,22 @@ const Login = () => {
       alignItems="center"
       minHeight="100vh"
       flexDirection="column"
+      sx={{
+        padding: 2, // Añade un padding para pantallas pequeñas
+      }}
     >
+      {/* Imagen responsiva */}
       <img
         src="/seniat.png"
         alt="Seniat"
-        style={{ width: "400px", height: "auto", marginBottom: "16px" }}
+        style={{
+          maxWidth: "100%", // Asegura que la imagen no se desborde
+          height: "auto",    // Mantiene la proporción
+          marginBottom: "16px",
+        }}
       />
+
+      {/* Título */}
       <Typography
         variant="h4"
         component="h4"
@@ -34,16 +44,18 @@ const Login = () => {
           fontFamily: "'Inter', sans-serif",
           fontWeight: "bold",
           textShadow: "3px 3px 3px rgba(0, 0, 0, 0.5)",
+          marginBottom: "16px", // Ajuste para separar el título del formulario
         }}
       >
         Control de Documentos
       </Typography>
 
+      {/* Contenedor del formulario */}
       <Container
         component="main"
         maxWidth="xs"
         sx={{
-          width: "400px",
+          width: { xs: "100%", sm: "400px" }, // Full width en pantallas pequeñas y 400px en mayores
           border: "1px solid #BEBEBE",
           borderRadius: "8px",
           padding: "24px",
@@ -58,6 +70,7 @@ const Login = () => {
         {error && <Alert severity="error">{error}</Alert>}
 
         <form onSubmit={handleSubmit} noValidate>
+          {/* Campo de cédula */}
           <TextField
             margin="normal"
             required
@@ -70,6 +83,8 @@ const Login = () => {
             value={cedula}
             onChange={(e) => setCedula(e.target.value)}
           />
+
+          {/* Campo de contraseña */}
           <TextField
             margin="normal"
             required
@@ -82,12 +97,17 @@ const Login = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+
+          {/* Botón de inicio de sesión */}
           <Button
             type="submit"
             fullWidth
             variant="contained"
             color="primary"
             disabled={loading}
+            sx={{
+              mt: 2, // Añade margen superior al botón
+            }}
           >
             {loading ? "Cargando..." : "Iniciar Sesión"}
           </Button>

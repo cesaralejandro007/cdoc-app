@@ -12,7 +12,7 @@ define('BASE_URL', $baseUri);
 /*##################### MODULO LOGIN #####################*/
 
 // Endpoint para iniciar sesión de usuario
-Route::post(BASE_URL . '/auth/login', LoginController::class . '@iniciarSesion');;
+Route::post(BASE_URL . '/auth/login', 'App\Controllers\LoginController@iniciarSesion');;
 Route::post(BASE_URL . '/auth/logout', 'App\Controllers\LoginController@cerrarSesion', [AuthMiddleware::class]);
 Route::post(BASE_URL . '/auth/verify-email', 'App\Controllers\LoginController@verificarEmail');
 Route::post(BASE_URL . '/auth/reset-password', 'App\Controllers\LoginController@restablecerContrasena');
