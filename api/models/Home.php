@@ -117,4 +117,53 @@ class Home extends Model {
             ]);
         }
     }
+
+    public function consultarDocEntrada() {
+        try {
+            $resultado = $this->conn->prepare("SELECT * FROM documentos WHERE estatus=1");
+            $resultado->execute();
+            $numero_filas = $resultado->rowCount(); 
+            echo $numero_filas;
+        } catch (Exception $e) {
+
+            return 0; 
+        }
+    }
+
+    public function consultarDocSalida() {   
+        try {
+            $resultado = $this->conn->prepare("SELECT * FROM documentos WHERE estatus=3");
+            $resultado->execute();
+            $numero_filas = $resultado->rowCount(); 
+            echo $numero_filas;
+        } catch (Exception $e) {
+
+            return 0; 
+        }
+    }
+
+    public function consultarDocSinEntrada() {   
+        try {
+            $resultado = $this->conn->prepare("SELECT * FROM documentos WHERE estatus=2");
+            $resultado->execute();
+            $numero_filas = $resultado->rowCount(); 
+            echo $numero_filas;
+        } catch (Exception $e) {
+
+            return 0; 
+        }
+    }
+
+    public function consultarDocAll() {  
+        try {
+            $resultado = $this->conn->prepare("SELECT * FROM documentos");
+            $resultado->execute();
+            $numero_filas = $resultado->rowCount(); 
+            echo $numero_filas;
+        } catch (Exception $e) {
+
+            return 0; 
+        }
+    }
+
 }

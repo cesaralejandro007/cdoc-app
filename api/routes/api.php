@@ -19,6 +19,10 @@ Route::post(BASE_URL . '/auth/logout', 'App\Controllers\LoginController@cerrarSe
 
 //REPORTES DE DOCUMENTOS DE HOME 
 Route::post(BASE_URL . '/home/report', 'App\Controllers\HomeController@consultarReporteDoc',  [AuthMiddleware::class]);
+Route::post(BASE_URL . '/home/get-doc-entrada', 'App\Controllers\HomeController@getDocEntrada',  [AuthMiddleware::class]);
+Route::post(BASE_URL . '/home/get-doc-salida', 'App\Controllers\HomeController@getDocSalida',  [AuthMiddleware::class]);
+Route::post(BASE_URL . '/home/get-doc-sin-entrada', 'App\Controllers\HomeController@getDocSinEntrada',  [AuthMiddleware::class]);
+Route::post(BASE_URL . '/home/get-doc-all', 'App\Controllers\HomeController@getDocAll',  [AuthMiddleware::class]);
 
 /*##################### MODULO USUARIO #####################*/
 //GESTIONAR DATOS DE USUARIOS
