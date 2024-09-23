@@ -14,8 +14,9 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           {/* Ruta protegida para HomePage */}
-          <Route path="/home/*" element={<HomePage />}>
-            <Route path="modules/*" element={<ModuleRoutes />} />
+          <Route path="/home" element={<HomePage />}>
+            <Route index element={<HomePage />} /> {/* Página de inicio */}
+            <Route path="modules/*" element={<ModuleRoutes />} /> {/* Rutas de módulos */}
           </Route>
         </Routes>
       </Router>

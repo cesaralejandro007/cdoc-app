@@ -14,25 +14,11 @@ define('BASE_URL', $baseUri);
 // Endpoint para iniciar sesión de usuario
 Route::post(BASE_URL . '/auth/login', 'App\Controllers\LoginController@iniciarSesion');;
 Route::post(BASE_URL . '/auth/logout', 'App\Controllers\LoginController@cerrarSesion', [AuthMiddleware::class]);
-Route::post(BASE_URL . '/auth/verify-email', 'App\Controllers\LoginController@verificarEmail');
-Route::post(BASE_URL . '/auth/reset-password', 'App\Controllers\LoginController@restablecerContrasena');
 
 /*##################### MODULO CONFIGURACION GLOBAL #####################*/
 
-//REGISTRAR DATOS DE CONFIGURACION GLOBAL
-Route::get(BASE_URL . '/conf/company/getNcf', 'App\Controllers\ConfigEmpresaController@consultarEmpresaNcf',  [AuthMiddleware::class]);
-Route::get(BASE_URL . '/conf/company/getMoneda', 'App\Controllers\ConfigEmpresaController@consultarTipoModeda',  [AuthMiddleware::class]);
-Route::get(BASE_URL . '/conf/company/getPaises', 'App\Controllers\ConfigEmpresaController@consultarPaises',  [AuthMiddleware::class]);
-Route::get(BASE_URL . '/conf/company/getTiendas', 'App\Controllers\ConfigEmpresaController@consultarTiendas',  [AuthMiddleware::class]);
-Route::get(BASE_URL . '/conf/company/getTipoVenta', 'App\Controllers\ConfigEmpresaController@consultarTipoVenta',  [AuthMiddleware::class]);
-Route::post(BASE_URL . '/conf/company/create', 'App\Controllers\ConfigEmpresaController@registrarEmpresa',  [AuthMiddleware::class]);
-/* Route::post(BASE_URL . '/conf/info-email', 'App\Controllers\ConfigController@registrarEmail',  [AuthMiddleware::class]);
-Route::post(BASE_URL . '/conf/tax-receipts', 'App\Controllers\ConfigController@registrarComprobante',  [AuthMiddleware::class]);
-Route::post(BASE_URL . '/conf/payment-form', 'App\Controllers\ConfigController@formaPago',  [AuthMiddleware::class]);
-Route::post(BASE_URL . '/conf/license', 'App\Controllers\ConfigController@registrarLicencia',  [AuthMiddleware::class]);
-Route::post(BASE_URL . '/conf/security', 'App\Controllers\ConfigController@registrarSeguridad',  [AuthMiddleware::class]);
-Route::post(BASE_URL . '/conf/skins-wedgets', 'App\Controllers\ConfigController@skinsWedgets',  [AuthMiddleware::class]);
-Route::post(BASE_URL . '/conf/calendar', 'App\Controllers\ConfigController@registrarCalendario',  [AuthMiddleware::class]); */
+//REPORTES DE DOCUMENTOS DE HOME 
+Route::post(BASE_URL . '/home/report', 'App\Controllers\HomeController@consultarReporteDoc',  [AuthMiddleware::class]);
 
 /*##################### MODULO USUARIO #####################*/
 //GESTIONAR DATOS DE USUARIOS

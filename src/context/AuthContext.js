@@ -9,9 +9,10 @@ export const AuthProvider = ({ children }) => {
 
   // Recupera el estado del usuario de localStorage al montar la aplicación
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    const storedSession = localStorage.getItem('session'); // Cambiado de 'user' a 'session'
+    if (storedSession) {
+      const parsedSession = JSON.parse(storedSession);
+      setUser(parsedSession); // Almacena el objeto completo
     }
     setLoading(false); // Marca como completada la recuperación de los datos
   }, []);
@@ -19,27 +20,26 @@ export const AuthProvider = ({ children }) => {
   // Función para iniciar sesión y almacenar el usuario
   const login_session = (userData) => {
     const { user, token } = userData;
-  
+
     // Crear una copia del objeto de usuario sin la contraseña
     const { contrasena, ...userWithoutPassword } = user;
-  
+
     // Almacenar un nuevo objeto que contenga el usuario sin la contraseña y el token
     const sessionData = {
       user: userWithoutPassword,
       token: token,
     };
-  
+
     // Guardar en localStorage
     localStorage.setItem('session', JSON.stringify(sessionData));
-  
-    setUser(userWithoutPassword); // Actualiza el estado del usuario
+
+    setUser(sessionData); // Actualiza el estado del usuario
   };
-  
-  
+
   // Función para cerrar sesión
   const deleteData = () => {
     setUser(null);
-    localStorage.removeItem('user'); // Elimina el usuario de localStorage
+    localStorage.removeItem('session'); // Elimina la sesión de localStorage
   };
 
   return (

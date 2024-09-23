@@ -8,7 +8,7 @@ use App\Core\Model;
 class Token extends Model {
     
     public function verifyToken($token) {
-        $query = "SELECT tokens_login.has AS token FROM usuarios JOIN tokens_login ON usuarios.id = tokens_login.usuario_id AND tokens_login.has = :token";
+        $query = "SELECT tokens_login.has AS token FROM usuarios JOIN tokens_login ON usuarios.id_usuario = tokens_login.id_usuario AND tokens_login.has = :token";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':token', $token);
         $stmt->execute();
