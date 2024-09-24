@@ -1,11 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Box, CssBaseline, CircularProgress, Grid, Typography } from '@mui/material';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { useHomePageData } from '../hooks/useReportData';
-import { getColumns, getTableData, paginationPageSizeSelector, AG_GRID_LOCALE_ES, calculateTableHeight } from '../utils/tableConfig';
+import { getColumns, getTableData, paginationPageSizeSelector, AG_GRID_LOCALE_ES } from '../utils/tableConfig';
 import useChartOptions from "../hooks/useReportChart";
 import Sidebar from './sidebar/Sidebar';
 import Header from './header/Header';
@@ -16,16 +16,16 @@ import AssignmentReturnIcon from '@mui/icons-material/AssignmentReturn';
 import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
 import AssignmentReturnedIcon from '@mui/icons-material/AssignmentReturned';
 import GradingIcon from '@mui/icons-material/Grading';
+import { usePagination } from '../hooks/usePagination';
 
 const HomePage = () => {
   const location = useLocation();
   const { reportData, docAll, docEntrada, docSinEntrada, docSalida, isLoading } = useHomePageData();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [paginationPageSize, setPaginationPageSize] = useState(6);
+  const { paginationPageSize, onGridReady, onPageSizeChanged } = usePagination(paginationPageSizeSelector);
   const columns = getColumns();
   const tableData = reportData ? getTableData(reportData) : [];
   const chartOptions = useChartOptions(reportData);
-  const tableHeight = useMemo(() => calculateTableHeight(paginationPageSize), [paginationPageSize]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -144,26 +144,43 @@ const HomePage = () => {
               borderRadius: '8px',
               padding: '16px',
               marginTop: '24px',
-              boxShadow: '5px 5px 5px 1px rgba(128, 128, 128, 0.5)'
+              boxShadow: '5px 5px 5px 1px rgba(128, 128, 128, 0.5)',
+              position: 'relative'  // Para permitir posicionamiento absoluto de elementos dentro
             }}>
-              <Typography variant="h6" component="h2" gutterBottom>
-                Reporte de Documentos
-              </Typography>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Typography variant="h6" component="h2" gutterBottom>
+                  Reporte de Documentos
+                </Typography>
 
-              {/* Gráfico con Highcharts */}
+                {/* Selector de tamaño de página personalizado */}
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <label htmlFor="pageSize" style={{ marginRight: '8px' }}>Tamaño de página:</label>
+                  <select id="pageSize" value={paginationPageSize} onChange={onPageSizeChanged}>
+                    {paginationPageSizeSelector.map(size => (
+                      <option key={size} value={size}>{size}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
 
               {/* Tabla de documentos */}
-              <div className="ag-theme-alpine" style={{ height: tableHeight, width: '100%', overflow: 'auto' }}>
+              <div className="ag-theme-alpine" style={{ width: '100%', margin: 'auto' }}>
                 <AgGridReact
                   rowData={tableData}
                   columnDefs={columns}
                   localeText={AG_GRID_LOCALE_ES}
                   paginationPageSize={paginationPageSize}
                   pagination={true}
-                  paginationPageSizeSelector={paginationPageSizeSelector}
-                  onPaginationChanged={(event) => setPaginationPageSize(event.api.paginationGetPageSize())}
-                  paginationAutoPageSize={false}
+                  domLayout='autoHeight'
+                  onGridReady={onGridReady}
                 />
+                <style jsx>
+                  {`
+                    .ag-paging-panel .ag-paging-page-size {
+                      display: none;  /* Ocultar el selector de tamaño de página por defecto */
+                    }
+                  `}
+                </style>
               </div>
             </Grid>
           </>

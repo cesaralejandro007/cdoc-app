@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 // utils/tableConfig.js
 export const AG_GRID_LOCALE_ES = {
     // for filter panel
@@ -116,8 +118,27 @@ export const getTableData = (reportData) =>
         meta: reportData.todos[mes].meta,
     }));
 
-
-export const calculateTableHeight = (paginationPageSize, rowHeight = 45, headerHeight = 56, minHeight = 300, maxHeight = 600) => {
-    const calculatedHeight = headerHeight + rowHeight * paginationPageSize;
-    return `${Math.min(Math.max(calculatedHeight, minHeight), maxHeight)}px`;
-};
+    export const CustomPagination = ({ api }) => {
+        const [pageSize, setPageSize] = useState(api.paginationGetPageSize());
+    
+        const onPageSizeChanged = (event) => {
+            const newSize = Number(event.target.value);
+            api.paginationSetPageSize(newSize);
+            setPageSize(newSize);
+        };
+    
+        return (
+            <div className="custom-pagination">
+                <span>Página {api.paginationGetCurrentPage() + 1} de {api.paginationGetTotalPages()}</span>
+                <span>
+                    Tamaño de página:
+                    <select value={pageSize} onChange={onPageSizeChanged}>
+                        {paginationPageSizeSelector.map(size => (
+                            <option key={size} value={size}>{size}</option>
+                        ))}
+                    </select>
+                </span>
+            </div>
+        );
+    };
+    
