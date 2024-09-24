@@ -173,8 +173,9 @@ const HomePage = () => {
                   pagination={true}
                   domLayout='autoHeight'
                   onGridReady={onGridReady}
+                  paginationPageSizeSelector={paginationPageSizeSelector}
                 />
-                <style jsx>
+                <style jsx="true">
                   {`
                     .ag-paging-panel .ag-paging-page-size {
                       display: none;  /* Ocultar el selector de tamaño de página por defecto */

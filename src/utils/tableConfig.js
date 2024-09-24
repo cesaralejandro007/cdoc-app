@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useState,useCallback} from "react";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import UploadIcon from '@mui/icons-material/Upload';
 
 // utils/tableConfig.js
 export const AG_GRID_LOCALE_ES = {
@@ -106,6 +109,64 @@ export const getColumns = () => [
     { headerName: '% Cumplimiento', field: 'cumplimiento', sortable: true, filter: true },
     { headerName: 'Meta', field: 'meta', sortable: true, filter: true },
 ];
+
+// utils/tableConfig.js
+
+
+// Definición de columnas de la tabla
+export const columnDefs = [
+  { headerName: 'Opciones', field: 'editar', cellRenderer: 'btns' },
+  { headerName: 'Fecha de Entrada', field: 'fecha_entrada_formateada' },
+  { headerName: 'Datos de la persona', field: 'usuario_completo' },
+  { headerName: 'Nº de documento', field: 'numero_doc' },
+  { headerName: 'Nombre de Remitente', field: 'nombre_rem' },
+  { headerName: 'Tipo de Documento', field: 'nombre_doc' },
+];
+
+// Componentes de acción
+export const frameworkComponents = {
+  btns: ({ data, handleEdit, handleDelete, handleMigrate }) => (
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: '100%' }} >
+      <button onClick={() => handleEdit(data.id_documento)} style={buttonStyle}>
+        <EditIcon fontSize="small" />
+      </button>
+      <button onClick={() => handleDelete(data.id_documento)} style={buttonStyle}>
+        <DeleteIcon fontSize="small" />
+      </button>
+      <button onClick={() => handleMigrate(data.id_documento)} style={buttonStyle}>
+        <UploadIcon fontSize="small" />
+      </button>
+    </div>
+  ),
+};
+
+// Estilo para los botones
+const buttonStyle = {
+  cursor: 'pointer',
+  padding: '3px 5px',
+  margin: '2px',
+  border: 'none',
+  borderRadius: '4px',
+  color: 'white',
+};
+
+// Funciones de manejo
+export const useTableHandlers = (onEdit, onDelete, onMigrate) => {
+  const handleEdit = useCallback((id) => {
+    onEdit(id);
+  }, [onEdit]);
+
+  const handleDelete = useCallback((id) => {
+    onDelete(id);
+  }, [onDelete]);
+
+  const handleMigrate = useCallback((id) => {
+    onMigrate(id);
+  }, [onMigrate]);
+
+  return { handleEdit, handleDelete, handleMigrate };
+};
+
 
 export const getTableData = (reportData) =>
     Object.keys(reportData.todos).map((mes) => ({

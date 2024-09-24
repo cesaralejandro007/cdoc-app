@@ -17,14 +17,14 @@ Route::post(BASE_URL . '/auth/logout', 'App\Controllers\LoginController@cerrarSe
 
 /*##################### MODULO CONFIGURACION GLOBAL #####################*/
 
-//REPORTES DE DOCUMENTOS DE HOME 
+//CONTROLADORES DE LA PAGINA DE INICIO
 Route::post(BASE_URL . '/home/report', 'App\Controllers\HomeController@consultarReporteDoc',  [AuthMiddleware::class]);
 Route::get(BASE_URL . '/home/get-doc/{id}', 'App\Controllers\HomeController@getDoc',  [AuthMiddleware::class]);
 Route::post(BASE_URL . '/home/get-doc-all', 'App\Controllers\HomeController@getDocAll',  [AuthMiddleware::class]);
 
-/*##################### MODULO USUARIO #####################*/
-//GESTIONAR DATOS DE USUARIOS
-Route::get(BASE_URL.'/user/all', 'App\Controllers\UsuarioController@all', [AuthMiddleware::class]);
+/*##################### #####################*/
+//CONTROLADORES DE DOCUMENTOS
+Route::get(BASE_URL.'/documents-entry/all', 'App\Controllers\DocumentsEntryController@all', [AuthMiddleware::class]);
 Route::get(BASE_URL . '/user/get/{id}', 'App\Controllers\UsuarioController@getById', [AuthMiddleware::class]);
 Route::post(BASE_URL . '/user/create', 'App\Controllers\UsuarioController@create', [AuthMiddleware::class]);
 Route::put(BASE_URL . '/user/edit/{id}', 'App\Controllers\UsuarioController@edit', [AuthMiddleware::class]);

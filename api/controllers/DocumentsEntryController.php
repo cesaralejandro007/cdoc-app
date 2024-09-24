@@ -2,24 +2,24 @@
 
 namespace App\Controllers;
 
-use App\Models\Usuario;
+use App\Models\DocumentsEntry;
 use App\Core\Controller;
 use App\Core\Responses;
 
-class UsuarioController extends Controller {
+class DocumentsEntryController extends Controller {
 
-    protected $usuario;
+    protected $documents_entry;
     protected $responses;
 
     public function __construct() {
-        $this->usuario = new Usuario();
+        $this->documents_entry = new DocumentsEntry();
         $this->responses = new Responses();  
     }
 
     /**
-     * Crea un nuevo Usuario.
+     * Crea un nuevo documents_entry.
      *
-     * @param array $request Datos del Usuario.
+     * @param array $request Datos del documents_entry.
      * @return mixed Respuesta de la operación.
      */
     public function create($request) {
@@ -66,27 +66,27 @@ class UsuarioController extends Controller {
             return $this->responses->error(implode(', ', $errors), 400);
         }
 
-        if ($this->usuario->byCedula($fields['cedula'])) {
-            return $this->responses->error("La cedula del usuario coincide con otro registro", 409);
+        if ($this->documents_entry->byCedula($fields['cedula'])) {
+            return $this->responses->error("La cedula del documents_entry coincide con otro registro", 409);
         }
 
-        if ($this->usuario->create($fields)) {
-            return $this->responses->success("Usuario creado exitosamente");
+        if ($this->documents_entry->create($fields)) {
+            return $this->responses->success("documents_entry creado exitosamente");
         }
 
-        return $this->responses->error("Error al crear el usuario", 500);
+        return $this->responses->error("Error al crear el documents_entry", 500);
     }
 
     /**
-     * Modifica un Usuario existente.
+     * Modifica un documents_entry existente.
      *
      * @param int $id 
-     * @param array $request Datos del Usuario.
+     * @param array $request Datos del documents_entry.
      * @return mixed Respuesta de la operación.
      */
     public function edit($id, $request) {
-        if (!$this->usuario->byId($id)) {
-            return $this->responses->error("El usuario no existe", 404);
+        if (!$this->documents_entry->byId($id)) {
+            return $this->responses->error("El documents_entry no existe", 404);
         }
 
         $fields = [
@@ -137,59 +137,57 @@ class UsuarioController extends Controller {
             return $value !== null;
         });
         
-        if ($this->usuario->edit($id, $fields)) {
-            return $this->responses->success("Usuario actualizado exitosamente");
+        if ($this->documents_entry->edit($id, $fields)) {
+            return $this->responses->success("documents_entry actualizado exitosamente");
         }
 
-        return $this->responses->error("Error al actualizar el usuario", 500);
+        return $this->responses->error("Error al actualizar el documents_entry", 500);
     }
 
     /**
-     * Consulta un Usuario por ID.
+     * Consulta un documents_entry por ID.
      *
      * @param int $id
      * @return mixed Respuesta de la operación.
      */
     public function getById($id) {
-        $usuario = $this->usuario->getById($id);
+        $documents_entry = $this->documents_entry->getById($id);
 
-        if (!$usuario) {
-            return $this->responses->error("Usuario no encontrado", 404);
+        if (!$documents_entry) {
+            return $this->responses->error("documents_entry no encontrado", 404);
         }
-
-        return $this->responses->success("Usuario encontrado", $usuario);
+        return $this->responses->success("documents_entry encontrado", $documents_entry);
     }
 
     /**
-     * Consulta todos los Usuarios.
+     * Consulta todos los documents_entrys.
      *
      * @return mixed Respuesta de la operación.
      */
     public function all() {
-        $usuarios = $this->usuario->all();
+        $documents_entrys = $this->documents_entry->all();
 
-        if (empty($usuarios)) {
-            return $this->responses->error("No hay usuarios disponibles", 404);
+        if (empty($documents_entrys)) {
+            return $this->responses->error("No hay Documentos disponibles", 404);
         }
-
-        return $this->responses->success("Usuarios obtenidos", $usuarios, count($usuarios));
+        return $this->responses->success("Documentos obtenidos", $documents_entrys, count($documents_entrys));
     }
 
     /**
-     * Elimina un Usuario por ID.
+     * Elimina un documents_entry por ID.
      *
      * @param int $id 
      * @return mixed Respuesta de la operación.
      */
     public function delete($id) {
-        if (!$this->usuario->byId($id)) {
-            return $this->responses->error("El usuario no existe", 404);
+        if (!$this->documents_entry->byId($id)) {
+            return $this->responses->error("El documents_entry no existe", 404);
         }
 
-        if ($this->usuario->delete($id)) {
-            return $this->responses->success("Usuario eliminado exitosamente");
+        if ($this->documents_entry->delete($id)) {
+            return $this->responses->success("documents_entry eliminado exitosamente");
         }
 
-        return $this->responses->error("Error al eliminar el usuario", 500);
+        return $this->responses->error("Error al eliminar el documents_entry", 500);
     }
 }
