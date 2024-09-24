@@ -93,6 +93,8 @@ export const AG_GRID_LOCALE_ES = {
     paste: 'Pegar'
 };
 
+export const paginationPageSizeSelector = [6, 12, 24, 48, 100];
+
 export const getColumns = () => [
     { headerName: 'Mes', field: 'mes', sortable: true, filter: true },
     { headerName: 'Doc. Entrada', field: 'entrada', sortable: true, filter: true },

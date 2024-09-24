@@ -119,51 +119,48 @@ class Home extends Model {
     }
 
     public function consultarDocEntrada() {
-        try {
-            $resultado = $this->conn->prepare("SELECT * FROM documentos WHERE estatus=1");
-            $resultado->execute();
-            $numero_filas = $resultado->rowCount(); 
-            echo $numero_filas;
-        } catch (Exception $e) {
-
-            return 0; 
-        }
+        $query = "SELECT * FROM documentos WHERE estatus = :estatus";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindValue(':estatus', 1);
+        $stmt->execute();
+        
+        $resultados = $stmt->fetchAll();
+        $totalDocumentos = count($resultados);
+        echo json_encode([
+            'total' => $totalDocumentos,
+            'documentos' => $resultados
+        ]);
     }
+    
 
-    public function consultarDocSalida() {   
-        try {
-            $resultado = $this->conn->prepare("SELECT * FROM documentos WHERE estatus=3");
-            $resultado->execute();
-            $numero_filas = $resultado->rowCount(); 
-            echo $numero_filas;
-        } catch (Exception $e) {
+public function consultarDocumentos($status = null) {
 
-            return 0; 
-        }
-    }
+    $query = "SELECT * FROM documentos WHERE estatus = :estatus";
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindValue(':estatus', $status);
 
-    public function consultarDocSinEntrada() {   
-        try {
-            $resultado = $this->conn->prepare("SELECT * FROM documentos WHERE estatus=2");
-            $resultado->execute();
-            $numero_filas = $resultado->rowCount(); 
-            echo $numero_filas;
-        } catch (Exception $e) {
+    $stmt->execute();
+    
+    $resultados = $stmt->fetchAll();
+    $totalDocumentos = count($resultados);
 
-            return 0; 
-        }
-    }
+    echo json_encode([
+        'total' => $totalDocumentos,
+        'documentos' => $resultados
+    ]);
+}
 
-    public function consultarDocAll() {  
-        try {
-            $resultado = $this->conn->prepare("SELECT * FROM documentos");
-            $resultado->execute();
-            $numero_filas = $resultado->rowCount(); 
-            echo $numero_filas;
-        } catch (Exception $e) {
-
-            return 0; 
-        }
-    }
+public function consultarDocAll() {  
+    $query = "SELECT * FROM documentos";
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute();
+    
+    $resultados = $stmt->fetchAll();
+    $totalDocumentos = count($resultados);
+    echo json_encode([
+        'total' => $totalDocumentos,
+        'documentos' => $resultados
+    ]);
+}
 
 }

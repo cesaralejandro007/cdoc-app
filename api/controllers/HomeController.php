@@ -26,20 +26,11 @@ class HomeController extends Controller {
         $this->home->consultarReporteDocAll();
     }
 
-    public function getDocEntrada() {   
-        $this->home->consultarDocEntrada();
-    }
-
-    public function getDocSalida() {   
-        $this->home->consultarDocSalida();
-    }
-
-    public function getDocSinEntrada() {   
-        $this->home->consultarDocSinEntrada();
+    public function getDoc($id) {   
+        $this->home->consultarDocumentos($id);
     }
 
     public function getDocAll() {   
         $this->home->consultarDocAll();
     }
-
 }

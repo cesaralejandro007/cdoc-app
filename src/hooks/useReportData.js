@@ -34,9 +34,9 @@ export const useHomePageData = () => {
       try {
         hasFetchedData.current = true; // Marcar que ya se han cargado los datos
         // Función para realizar las llamadas a las diferentes APIs
-        const fetchFromApi = async (url) => {
+        const fetchFromApi = async (url,application) => {
           const response = await fetch(url, {
-            method: 'POST',
+            method: application,
             headers: {
               Authorization: `Bearer ${user.token}`,
               'Content-Type': 'application/json',
@@ -57,11 +57,11 @@ export const useHomePageData = () => {
         };
 
         // Llamadas a las diferentes APIs en paralelo
-        const [totalEntrada, totalAll, totalSinEntrada, totalSalida] = await Promise.all([
-          fetchFromApi('http://localhost/cdoc-app/api/home/get-doc-entrada'),
-          fetchFromApi('http://localhost/cdoc-app/api/home/get-doc-all'),
-          fetchFromApi('http://localhost/cdoc-app/api/home/get-doc-sin-entrada'),
-          fetchFromApi('http://localhost/cdoc-app/api/home/get-doc-salida'),
+        const [totalEntrada, totalSinEntrada, totalSalida,totalAll] = await Promise.all([
+          fetchFromApi('http://localhost/cdoc-app/api/home/get-doc/1','GET'),
+          fetchFromApi('http://localhost/cdoc-app/api/home/get-doc/2','GET'),
+          fetchFromApi('http://localhost/cdoc-app/api/home/get-doc/3','GET'),
+          fetchFromApi('http://localhost/cdoc-app/api/home/get-doc-all','POST'),
         ]);
 
         // Guardar los datos obtenidos
