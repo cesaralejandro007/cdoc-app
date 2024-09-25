@@ -127,27 +127,17 @@ export const columnDefs = [
 export const frameworkComponents = {
   btns: ({ data, handleEdit, handleDelete, handleMigrate }) => (
     <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: '100%' }} >
-      <button onClick={() => handleEdit(data.id_documento)} style={buttonStyle}>
+      <button onClick={() => handleEdit(data.id_documento)} style={{ cursor: 'pointer', padding: '3px 5px', backgroundColor: '#E67E22', color: 'white', margin: '2px', border: 'none', borderRadius: '4px' }}>
         <EditIcon fontSize="small" />
       </button>
-      <button onClick={() => handleDelete(data.id_documento)} style={buttonStyle}>
+      <button onClick={() => handleDelete(data.id_documento)} style={{ cursor: 'pointer', padding: '3px 5px', backgroundColor: '#9D2323', color: 'white', margin: '2px', border: 'none', borderRadius: '4px' }}>
         <DeleteIcon fontSize="small" />
       </button>
-      <button onClick={() => handleMigrate(data.id_documento)} style={buttonStyle}>
+      <button onClick={() => handleMigrate(data.id_documento)} style={{ cursor: 'pointer', padding: '3px 5px', backgroundColor: '#0228B5', color: 'white', margin: '2px', border: 'none', borderRadius: '4px' }}>
         <UploadIcon fontSize="small" />
       </button>
     </div>
   ),
-};
-
-// Estilo para los botones
-const buttonStyle = {
-  cursor: 'pointer',
-  padding: '3px 5px',
-  margin: '2px',
-  border: 'none',
-  borderRadius: '4px',
-  color: 'white',
 };
 
 // Funciones de manejo

@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import { AuthContext } from '../context/AuthContext';
 
 export const useFetch = (url, method = 'GET', body = null, headers = {}, shouldFetch = true) => {
@@ -7,27 +7,32 @@ export const useFetch = (url, method = 'GET', body = null, headers = {}, shouldF
   const [error, setError] = useState(null);
   const { user } = useContext(AuthContext);
 
+  // useRef para mantener una referencia estable de headers y body
+  const headersRef = useRef({
+    Authorization: `Bearer ${user.token}`,
+    'Content-Type': 'application/json',
+    ...headers,
+  });
+
+  const bodyRef = useRef(body ? JSON.stringify(body) : null);
+
   useEffect(() => {
     const fetchData = async () => {
       if (!shouldFetch || !url) return; // Salir si no debería realizar la petición
-  
+
       setIsLoading(true);
       try {
         const response = await fetch(url, {
           method,
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-            'Content-Type': 'application/json',
-            ...headers, // Permite agregar headers personalizados
-          },
-          body: body ? JSON.stringify(body) : null,
+          headers: headersRef.current,
+          body: bodyRef.current,
         });
-  
+
         if (!response.ok) {
           const errorData = await response.json();
           throw new Error(errorData.message || 'Error en la solicitud');
         }
-  
+
         const result = await response.json();
         setData(result);
       } catch (err) {
@@ -36,10 +41,9 @@ export const useFetch = (url, method = 'GET', body = null, headers = {}, shouldF
         setIsLoading(false);
       }
     };
-  
+
     fetchData();
-  }, [url, user.token, shouldFetch]); // Solo dependencias necesarias
-  
+  }, [url, method, shouldFetch, user.token]); // Dependencias necesarias
 
   return { data, isLoading, error };
 };
