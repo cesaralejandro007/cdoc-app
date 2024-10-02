@@ -6,27 +6,20 @@ import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { AgGridReact } from 'ag-grid-react';
 import { Typography } from '@mui/material';
 import { usePagination } from '@mui/material';
-import { useFetch } from '../hooks/useRequest';
 import { AG_GRID_LOCALE_ES, paginationPageSizeSelector, columnDefs, frameworkComponents, useTableHandlers } from '../utils/tableConfig';
+import { useCrud } from '../hooks/useCrud';
 
 const DocumentEntry = React.memo(() => {
-  const { data, isLoading, error } = useFetch('http://localhost/cdoc-app/api/documents-entry/all');
   const { paginationPageSize, onGridReady, onPageSizeChanged } = usePagination(paginationPageSizeSelector);
+  const {
+    data, 
+    isLoading, 
+    error, 
+    handleEdit, 
+    handleDelete, 
+    handleMigrate
+  } = useCrud('http://localhost/cdoc-app/api/documents-entry/all');
 
-  // Funciones de manejo
-  const handleEdit = (id) => {
-    console.log(`Editar documento con ID: ${id}`);
-  };
-
-  const handleDelete = (id) => {
-    console.log(`Eliminar documento con ID: ${id}`);
-  };
-
-  const handleMigrate = (id) => {
-    console.log(`Migrar documento con ID: ${id}`);
-  };
-
-  // Uso de los manejadores
   const { handleEdit: edit, handleDelete: deleteHandler, handleMigrate: migrate } = useTableHandlers(handleEdit, handleDelete, handleMigrate);
 
   // Manejo de estados de carga y error
