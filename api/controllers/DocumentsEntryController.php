@@ -173,6 +173,25 @@ class DocumentsEntryController extends Controller {
         return $this->responses->success("Documentos obtenidos", $documents_entrys, count($documents_entrys));
     }
 
+    public function allDocType() {
+        $documents_entrys = $this->documents_entry->allDocType();
+
+        if (empty($documents_entrys)) {
+            return $this->responses->error("No hay tipos de Documentos disponibles", 404);
+        }
+        return $this->responses->success("Tipos de documentos obtenidos", $documents_entrys, count($documents_entrys));
+    }
+
+
+    public function allSenderType() {
+        $documents_entrys = $this->documents_entry->allSenderType();
+
+        if (empty($documents_entrys)) {
+            return $this->responses->error("No hay tipos de Remitentes disponibles", 404);
+        }
+        return $this->responses->success("Tipos de remitentes obtenidos", $documents_entrys, count($documents_entrys));
+    }
+
     /**
      * Elimina un documents_entry por ID.
      *

@@ -22,6 +22,8 @@ Route::post(BASE_URL . '/home/report', 'App\Controllers\HomeController@consultar
 Route::get(BASE_URL . '/home/get-doc/{id}', 'App\Controllers\HomeController@getDoc',  [AuthMiddleware::class]);
 Route::post(BASE_URL . '/home/get-doc-all', 'App\Controllers\HomeController@getDocAll',  [AuthMiddleware::class]);
 
+Route::get(BASE_URL.'/documents-entry/document-type', 'App\Controllers\DocumentsEntryController@allDocType', [AuthMiddleware::class]);
+Route::get(BASE_URL.'/documents-entry/sender-type', 'App\Controllers\DocumentsEntryController@allSenderType', [AuthMiddleware::class]);
 /*##################### #####################*/
 //CONTROLADORES DE DOCUMENTOS
 Route::get(BASE_URL.'/documents-entry/all', 'App\Controllers\DocumentsEntryController@all', [AuthMiddleware::class]);

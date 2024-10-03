@@ -123,33 +123,50 @@ export const columnDefs = [
   { headerName: 'Tipo de Documento', field: 'nombre_doc' },
 ];
 
-// Componentes de acción
+// Aquí defines el componente con los botones
 export const frameworkComponents = {
   btns: ({ data, handleEdit, handleDelete, handleMigrate }) => (
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: '100%' }} >
-      <button onClick={() => handleEdit(data.id_documento)} style={{ cursor: 'pointer', padding: '3px 5px', backgroundColor: '#E67E22', color: 'white', margin: '2px', border: 'none', borderRadius: '4px' }}>
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: '100%' }}>
+      {/* Botón para editar */}
+      <button 
+        onClick={() => handleEdit(data.id_documento, data)} 
+        style={{ cursor: 'pointer', padding: '3px 5px', backgroundColor: '#E67E22', color: 'white', margin: '2px', border: 'none', borderRadius: '4px' }}
+      >
         <EditIcon fontSize="small" />
       </button>
-      <button onClick={() => handleDelete(data.id_documento)} style={{ cursor: 'pointer', padding: '3px 5px', backgroundColor: '#9D2323', color: 'white', margin: '2px', border: 'none', borderRadius: '4px' }}>
+      
+      {/* Botón para eliminar */}
+      <button 
+        onClick={() => handleDelete(data.id_documento)} 
+        style={{ cursor: 'pointer', padding: '3px 5px', backgroundColor: '#9D2323', color: 'white', margin: '2px', border: 'none', borderRadius: '4px' }}
+      >
         <DeleteIcon fontSize="small" />
       </button>
-      <button onClick={() => handleMigrate(data.id_documento)} style={{ cursor: 'pointer', padding: '3px 5px', backgroundColor: '#0228B5', color: 'white', margin: '2px', border: 'none', borderRadius: '4px' }}>
+      
+      {/* Botón para migrar */}
+      <button 
+        onClick={() => handleMigrate(data.id_documento)} 
+        style={{ cursor: 'pointer', padding: '3px 5px', backgroundColor: '#0228B5', color: 'white', margin: '2px', border: 'none', borderRadius: '4px' }}
+      >
         <UploadIcon fontSize="small" />
       </button>
     </div>
   ),
 };
 
-// Funciones de manejo
+// Funciones para manejar las acciones de los botones
 export const useTableHandlers = (onEdit, onDelete, onMigrate) => {
-  const handleEdit = useCallback((id) => {
-    onEdit(id);
+  // Manejador para editar
+  const handleEdit = useCallback((id, data) => {
+    onEdit(id, data); // Aquí pasas tanto el `id` como el `data` completo
   }, [onEdit]);
 
+  // Manejador para eliminar
   const handleDelete = useCallback((id) => {
     onDelete(id);
   }, [onDelete]);
 
+  // Manejador para migrar
   const handleMigrate = useCallback((id) => {
     onMigrate(id);
   }, [onMigrate]);

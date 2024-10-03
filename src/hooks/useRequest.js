@@ -45,5 +45,5 @@ export const useFetch = (url, method = 'GET', body = null, headers = {}, shouldF
     fetchData();
   }, [url, method, shouldFetch, user.token]); // Dependencias necesarias
 
-  return { data, isLoading, error };
+  return { data, setData, isLoading, error };
 };

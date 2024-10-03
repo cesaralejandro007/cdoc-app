@@ -54,6 +54,22 @@ class DocumentsEntry extends Model {
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    public function allDocType() {
+        $query = "SELECT * FROM tipos_documentos";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+
+    public function allSenderType() {
+        $query = "SELECT * FROM remitentes";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+
     /**
      * Elimina un Usuario por ID.
      *
