@@ -2,24 +2,24 @@
 
 namespace App\Controllers;
 
-use App\Models\DocumentsEntry;
+use App\Models\Documents;
 use App\Core\Controller;
 use App\Core\Responses;
 
-class DocumentsEntryController extends Controller {
+class DocumentsController extends Controller {
 
-    protected $documents_entry;
+    protected $documents;
     protected $responses;
 
     public function __construct() {
-        $this->documents_entry = new DocumentsEntry();
+        $this->documents = new Documents();
         $this->responses = new Responses();  
     }
 
     /**
-     * Crea un nuevo documents_entry.
+     * Crea un nuevo documents.
      *
-     * @param array $request Datos del documents_entry.
+     * @param array $request Datos del documents.
      * @return mixed Respuesta de la operación.
      */
     public function create($request) {
@@ -66,27 +66,27 @@ class DocumentsEntryController extends Controller {
             return $this->responses->error(implode(', ', $errors), 400);
         }
 
-        if ($this->documents_entry->byCedula($fields['cedula'])) {
-            return $this->responses->error("La cedula del documents_entry coincide con otro registro", 409);
+        if ($this->documents->byCedula($fields['cedula'])) {
+            return $this->responses->error("La cedula del documents coincide con otro registro", 409);
         }
 
-        if ($this->documents_entry->create($fields)) {
-            return $this->responses->success("documents_entry creado exitosamente");
+        if ($this->documents->create($fields)) {
+            return $this->responses->success("documents creado exitosamente");
         }
 
-        return $this->responses->error("Error al crear el documents_entry", 500);
+        return $this->responses->error("Error al crear el documents", 500);
     }
 
     /**
-     * Modifica un documents_entry existente.
+     * Modifica un documents existente.
      *
      * @param int $id 
-     * @param array $request Datos del documents_entry.
+     * @param array $request Datos del documents.
      * @return mixed Respuesta de la operación.
      */
     public function edit($id, $request) {
-        if (!$this->documents_entry->byId($id)) {
-            return $this->responses->error("El documents_entry no existe", 404);
+        if (!$this->documents->byId($id)) {
+            return $this->responses->error("El documents no existe", 404);
         }
 
         $fields = [
@@ -137,76 +137,75 @@ class DocumentsEntryController extends Controller {
             return $value !== null;
         });
         
-        if ($this->documents_entry->edit($id, $fields)) {
-            return $this->responses->success("documents_entry actualizado exitosamente");
+        if ($this->documents->edit($id, $fields)) {
+            return $this->responses->success("documents actualizado exitosamente");
         }
 
-        return $this->responses->error("Error al actualizar el documents_entry", 500);
+        return $this->responses->error("Error al actualizar el documents", 500);
     }
 
     /**
-     * Consulta un documents_entry por ID.
+     * Consulta un documents por ID.
      *
      * @param int $id
      * @return mixed Respuesta de la operación.
      */
     public function getById($id) {
-        $documents_entry = $this->documents_entry->getById($id);
+        $documents = $this->documents->getById($id);
 
-        if (!$documents_entry) {
-            return $this->responses->error("documents_entry no encontrado", 404);
+        if (!$documents) {
+            return $this->responses->error("documents no encontrado", 404);
         }
-        return $this->responses->success("documents_entry encontrado", $documents_entry);
+        return $this->responses->success("documents encontrado", $documents);
     }
 
     /**
-     * Consulta todos los documents_entrys.
+     * Consulta todos los documentss.
      *
      * @return mixed Respuesta de la operación.
      */
-    public function all() {
-        $documents_entrys = $this->documents_entry->all();
+    public function all($id) {
+        $documents = $this->documents->all($id);
 
-        if (empty($documents_entrys)) {
+        if (empty($documents)) {
             return $this->responses->error("No hay Documentos disponibles", 404);
         }
-        return $this->responses->success("Documentos obtenidos", $documents_entrys, count($documents_entrys));
+        return $this->responses->success("Documentos obtenidos", $documents, count($documents));
     }
 
     public function allDocType() {
-        $documents_entrys = $this->documents_entry->allDocType();
+        $documents = $this->documents->allDocType();
 
-        if (empty($documents_entrys)) {
+        if (empty($documents)) {
             return $this->responses->error("No hay tipos de Documentos disponibles", 404);
         }
-        return $this->responses->success("Tipos de documentos obtenidos", $documents_entrys, count($documents_entrys));
+        return $this->responses->success("Tipos de documentos obtenidos", $documents, count($documents));
     }
 
 
     public function allSenderType() {
-        $documents_entrys = $this->documents_entry->allSenderType();
+        $documents = $this->documents->allSenderType();
 
-        if (empty($documents_entrys)) {
+        if (empty($documents)) {
             return $this->responses->error("No hay tipos de Remitentes disponibles", 404);
         }
-        return $this->responses->success("Tipos de remitentes obtenidos", $documents_entrys, count($documents_entrys));
+        return $this->responses->success("Tipos de remitentes obtenidos", $documents, count($documents));
     }
-
     /**
-     * Elimina un documents_entry por ID.
+     * Elimina un documents por ID.
      *
      * @param int $id 
      * @return mixed Respuesta de la operación.
      */
     public function delete($id) {
-        if (!$this->documents_entry->byId($id)) {
-            return $this->responses->error("El documents_entry no existe", 404);
+        if (!$this->documents->byId($id)) {
+            return $this->responses->error("El documents no existe", 404);
         }
 
-        if ($this->documents_entry->delete($id)) {
-            return $this->responses->success("documents_entry eliminado exitosamente");
+        if ($this->documents->delete($id)) {
+            return $this->responses->success("documents eliminado exitosamente");
         }
 
-        return $this->responses->error("Error al eliminar el documents_entry", 500);
+        return $this->responses->error("Error al eliminar el documents", 500);
     }
 }

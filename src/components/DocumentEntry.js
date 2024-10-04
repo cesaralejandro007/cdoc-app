@@ -18,7 +18,7 @@ const DocumentEntry = React.memo(() => {
     handleEdit, 
     handleDelete, 
     handleMigrate
-  } = useCrud('http://localhost/cdoc-app/api/documents-entry/all');
+  } = useCrud('http://localhost/cdoc-app/api/documents/all/1');
 
   const { handleEdit: edit, handleDelete: deleteHandler, handleMigrate: migrate } = useTableHandlers(handleEdit, handleDelete, handleMigrate);
 

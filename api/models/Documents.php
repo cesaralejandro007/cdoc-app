@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Core\Model;
 
-class DocumentsEntry extends Model {
+class Documents extends Model {
     private $table = "documentos";
     /**
      * Crea un nuevo Usuario.
@@ -47,13 +47,62 @@ class DocumentsEntry extends Model {
      *
      * @return array Listado de todos los Usuarios.
      */
-    public function all() {
-        $query = "SELECT documentos.id_documento AS id_documento, documentos.fecha_entrada AS fecha_entrada, documentos.fecha_registro AS fecha_registro, documentos.descripcion AS descripcion, documentos.numero_doc AS numero_doc, documentos.estatus AS estatus, remitentes.id_remitente AS id_remitente,tipos_documentos.id_tipo_documento AS id_tipo_documento,remitentes.nombre_rem AS nombre_rem,tipos_documentos.nombre_doc AS nombre_doc, tipos_documentos.descripcion_doc AS descripcion_doc, usuarios.id_usuario AS id_usuario, usuarios.cedula AS cedula, usuarios.nombres AS nombres, usuarios.apellidos AS apellidos, usuarios.rol AS rol, DATE_FORMAT(documentos.fecha_entrada, '%d/%m/%Y') AS fecha_entrada_formateada, CONCAT(usuarios.cedula, ', ', usuarios.nombres, ' ', usuarios.apellidos) AS usuario_completo FROM documentos,tipos_documentos,remitentes,usuarios WHERE documentos.id_tipo_documento = tipos_documentos.id_tipo_documento AND documentos.id_remitente = remitentes.id_remitente AND documentos.id_usuario = usuarios.id_usuario AND documentos.estatus = '1'";
+    public function all($status) {
+        $query = "SELECT 
+                    documentos.id_documento AS id_documento,
+                    documentos.fecha_entrada AS fecha_entrada,
+                    documentos.fecha_registro AS fecha_registro,
+                    documentos.descripcion AS descripcion,
+                    documentos.numero_doc AS numero_doc,
+                    documentos.estatus AS estatus,
+                    tipos_documentos.id_tipo_documento AS id_tipo_documento,
+                    tipos_documentos.nombre_doc AS nombre_doc,
+                    tipos_documentos.descripcion_doc AS descripcion_doc,
+                    usuarios.id_usuario AS id_usuario,
+                    usuarios.cedula AS cedula,
+                    usuarios.nombres AS nombres,
+                    usuarios.apellidos AS apellidos,
+                    usuarios.rol AS rol,
+                    CONCAT(usuarios.cedula, ', ', usuarios.nombres, ' ', usuarios.apellidos) AS usuario_completo";
+    
+        // Añadir nombre_rem solo para estatus "1"
+        if ($status == "1") {
+            $query .= ", remitentes.nombre_rem AS nombre_rem, 
+                       DATE_FORMAT(documentos.fecha_entrada, '%d/%m/%Y') AS fecha_entrada_formateada";
+        } elseif ($status == "2") {
+            $query .= ", DATE_FORMAT(documentos.fecha_entrada, '%d/%m/%Y') AS fecha_entrada_formateada";
+        } elseif ($status == "3") {
+            $query .= ", remitentes.nombre_rem AS nombre_rem, 
+                       DATE_FORMAT(documentos.fecha_entrada, '%d/%m/%Y') AS fecha_entrada_formateada,
+                       DATE_FORMAT(salidas.fecha_salida, '%d/%m/%Y') AS fecha_salida_formateada,
+                       DATEDIFF(salidas.fecha_salida, documentos.fecha_entrada) AS diferencia_dias";
+        }
+    
+        // Base de la consulta
+        $query .= " FROM documentos
+                    JOIN tipos_documentos ON documentos.id_tipo_documento = tipos_documentos.id_tipo_documento
+                    JOIN usuarios ON documentos.id_usuario = usuarios.id_usuario";
+        
+        // Añadir tablas adicionales según el estatus
+        if ($status == "1" || $status == "3") {
+            $query .= " JOIN remitentes ON documentos.id_remitente = remitentes.id_remitente";
+        }
+        if ($status == "3") {
+            $query .= " JOIN salidas ON documentos.id_documento = salidas.id_documento
+                        JOIN destinatarios ON salidas.id_destinatario = destinatarios.id_destinatario";
+        }
+    
+        // Filtrar por estatus
+        $query .= " WHERE documentos.estatus = :status";
+    
         $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':status', $status, \PDO::PARAM_INT);
         $stmt->execute();
+    
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    
     public function allDocType() {
         $query = "SELECT * FROM tipos_documentos";
         $stmt = $this->conn->prepare($query);
@@ -69,7 +118,7 @@ class DocumentsEntry extends Model {
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-
+    
     /**
      * Elimina un Usuario por ID.
      *

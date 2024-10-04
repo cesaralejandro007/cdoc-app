@@ -9,7 +9,7 @@ import Swal from 'sweetalert2';
 
 const showEditAlert = async (documento, user) => {
   // Obtener tipos de remitentes
-  const ResNombreRem = await fetch("http://localhost/cdoc-app/api/documents-entry/sender-type", {
+  const ResNombreRem = await fetch("http://localhost/cdoc-app/api/documents/sender-type", {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -24,7 +24,7 @@ const showEditAlert = async (documento, user) => {
   const tiposRemitentes = await ResNombreRem.json();
 
   // Obtener tipos de documentos
-  const RestipoDoc = await fetch("http://localhost/cdoc-app/api/documents-entry/document-type", {
+  const RestipoDoc = await fetch("http://localhost/cdoc-app/api/documents/document-type", {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -103,24 +103,21 @@ const showEditAlert = async (documento, user) => {
     </>
   );
 
-  // Mostrar alerta de SweetAlert con tamaño mediano
   return await Swal.fire({
     title: 'Editar Documento',
-    html: div,  // Aquí usamos el contenedor con los componentes de Material-UI
+    html: div,
     showCancelButton: true,
+    confirmButtonColor: '#e67e22', // Rojo para el botón de confirmación
     confirmButtonText: 'Guardar',
     cancelButtonText: 'Cancelar',
     focusConfirm: false,
-    customClass: {
-      popup: 'swal2-medium-popup', // Puedes personalizar el tamaño con esta clase
-    },
     preConfirm: () => {
       return {
         numeroDocumento: document.getElementById('numeroDocumento').value,
         fechaEntrada: document.getElementById('fechaEntrada').value,
         descripcion: document.getElementById('descripcion').value,
-        tipoDocumento: document.querySelector('#tipoDocumento input').value,
-        tipoRemitente: document.querySelector('#tipoRemitente input').value,
+        tipoDocumento: document.querySelector('#tipoDocumento').value,
+        tipoRemitente: document.querySelector('#tipoRemitente').value,
       };
     },
   });
@@ -130,7 +127,7 @@ const showEditAlert = async (documento, user) => {
 // Función para manejar la edición del documento
 const editDocument = async (url, user, datos) => {
   const response = await fetch(url, {
-    method: 'POST',
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${user.token}`,
@@ -179,13 +176,15 @@ export const useCrud = (url) => {
 
     // Mostrar SweetAlert de confirmación
     const result = await Swal.fire({
-      title: '¿Estás seguro?',
-      text: `¿Deseas eliminar el documento: ${documento.numero_doc}?`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar',
-    });
+        title: '¿Estás seguro?',
+        text: `¿Deseas eliminar el documento: ${documento.numero_doc}?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#9d2323', // Rojo para el botón de confirmación
+
+      });
 
     if (result.isConfirmed) {
       try {
@@ -211,9 +210,9 @@ export const useCrud = (url) => {
     const result = await showEditAlert(documento, user);
     if (result.isConfirmed) {
       const datos = { ...documento, ...result.value };
-
+      const editar_url = 'http://localhost/cdoc-app/api/documents/edit/1';
       try {
-        const data = await editDocument(url, user, datos);
+        const data = await editDocument(editar_url, user, datos);
         await showAlert('Éxito', 'Documento editado correctamente.', 'success'); // Usa el hook de alertas
 
         setData((prevItems) =>

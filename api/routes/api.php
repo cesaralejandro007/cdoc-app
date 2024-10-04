@@ -22,11 +22,16 @@ Route::post(BASE_URL . '/home/report', 'App\Controllers\HomeController@consultar
 Route::get(BASE_URL . '/home/get-doc/{id}', 'App\Controllers\HomeController@getDoc',  [AuthMiddleware::class]);
 Route::post(BASE_URL . '/home/get-doc-all', 'App\Controllers\HomeController@getDocAll',  [AuthMiddleware::class]);
 
-Route::get(BASE_URL.'/documents-entry/document-type', 'App\Controllers\DocumentsEntryController@allDocType', [AuthMiddleware::class]);
-Route::get(BASE_URL.'/documents-entry/sender-type', 'App\Controllers\DocumentsEntryController@allSenderType', [AuthMiddleware::class]);
 /*##################### #####################*/
 //CONTROLADORES DE DOCUMENTOS
-Route::get(BASE_URL.'/documents-entry/all', 'App\Controllers\DocumentsEntryController@all', [AuthMiddleware::class]);
+Route::get(BASE_URL.'/documents/all/{id}', 'App\Controllers\DocumentsController@all', [AuthMiddleware::class]);
+Route::get(BASE_URL.'/documents/document-type', 'App\Controllers\DocumentsController@allDocType', [AuthMiddleware::class]);
+Route::get(BASE_URL.'/documents/sender-type', 'App\Controllers\DocumentsController@allSenderType', [AuthMiddleware::class]);
+Route::put(BASE_URL . '/documents/edit/{id}', 'App\Controllers\DocumentsController@edit', [AuthMiddleware::class]);
+
+
+
+
 Route::get(BASE_URL . '/user/get/{id}', 'App\Controllers\UsuarioController@getById', [AuthMiddleware::class]);
 Route::post(BASE_URL . '/user/create', 'App\Controllers\UsuarioController@create', [AuthMiddleware::class]);
 Route::put(BASE_URL . '/user/edit/{id}', 'App\Controllers\UsuarioController@edit', [AuthMiddleware::class]);

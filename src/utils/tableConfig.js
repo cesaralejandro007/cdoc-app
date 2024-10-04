@@ -123,6 +123,25 @@ export const columnDefs = [
   { headerName: 'Tipo de Documento', field: 'nombre_doc' },
 ];
 
+export const columnDefsDocExit = [
+  { headerName: 'Opciones', field: 'editar', cellRenderer: 'btns' },
+  { headerName: 'Datos de la persona', field: 'usuario_completo' },
+  { headerName: 'Nº de documento', field: 'numero_doc' },
+  { headerName: 'Fecha de Entrada', field: 'fecha_entrada_formateada' },
+  { headerName: 'Fecha de salida', field: 'fecha_salida_formateada' },
+  { headerName: 'Nombre de Remitente', field: 'nombre_rem' },
+  { headerName: 'Descripción del documento', field: 'descripcion' }
+];
+
+export const columnDefsDocWithoutEntry = [
+  { headerName: 'Opciones', field: 'editar', cellRenderer: 'btns' },
+  { headerName: 'Datos de la persona', field: 'usuario_completo' },
+  { headerName: 'Nº de documento', field: 'numero_doc' },
+  { headerName: 'Tipo de Documento', field: 'nombre_doc' }
+];
+
+
+
 // Aquí defines el componente con los botones
 export const frameworkComponents = {
   btns: ({ data, handleEdit, handleDelete, handleMigrate }) => (
