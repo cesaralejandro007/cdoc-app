@@ -23,6 +23,7 @@ const showEditAlert = async (documento, user) => {
   }
   const tiposRemitentes = await ResNombreRem.json();
 
+  
   // Obtener tipos de documentos
   const RestipoDoc = await fetch("http://localhost/cdoc-app/api/documents/document-type", {
     method: 'GET',
@@ -31,20 +32,45 @@ const showEditAlert = async (documento, user) => {
       Authorization: `Bearer ${user.token}`,
     },
   });
-
+  
   if (!RestipoDoc.ok) {
     const errorData = await RestipoDoc.json();
     throw new Error(errorData.message || 'Error al obtener tipos de documentos');
   }
   const tiposDocumentos = await RestipoDoc.json();
-
+  
   // Crear un contenedor de React para usar los componentes de Material-UI
   const div = document.createElement('div');
   const root = createRoot(div);
+  
+  const uniqueDocumentos = {};
 
-  // Listas de opciones para Autocomplete
-  const opcionesDocumentos = tiposDocumentos.data.map((tipo) => tipo.nombre_doc);
-  const opcionesRemitentes = tiposRemitentes.data.map((tipo) => tipo.nombre_rem);
+  // Recorrer los tipos de documentos y agregarlos solo si no están repetidos
+  const opcionesDocumentos = tiposDocumentos.data.reduce((acc, tipo) => {
+    if (!uniqueDocumentos[tipo.nombre_doc]) { // Corregir aquí para comparar por nombre del documento
+      uniqueDocumentos[tipo.nombre_doc] = true;  // Marcar como existente
+      acc.push({
+        key: tipo.id_tipo_documento,
+        label: tipo.nombre_doc, // También corregir para que use el nombre del documento
+      });
+    }
+    return acc;
+  }, []);
+ 
+const uniqueRemitentes = {};
+
+// Recorrer los tipos de remitentes y agregarlos solo si no están repetidos
+const opcionesRemitentes = tiposRemitentes.data.reduce((acc, tipo) => {
+  if (!uniqueRemitentes[tipo.nombre_rem]) {
+    uniqueRemitentes[tipo.nombre_rem] = true;  // Marcar como existente
+    acc.push({
+      key: tipo.id_remitente,
+      label: tipo.nombre_rem,
+    });
+  }
+  return acc;
+}, []);
+
 
   // Renderizar los componentes de Material-UI en el contenedor
   root.render(
@@ -71,7 +97,8 @@ const showEditAlert = async (documento, user) => {
       <Autocomplete
         id="tipoDocumento"
         options={opcionesDocumentos}
-        defaultValue={documento.nombre_doc}
+        getOptionLabel={(option) => option.label} // Mostrar el nombre del documento
+        defaultValue={opcionesDocumentos.find((opt) => opt.label === documento.nombre_doc)} // Establecer valor por defecto
         renderInput={(params) => (
           <TextField {...params} label="Tipo de Documento" variant="outlined" margin="dense" />
         )}
@@ -82,7 +109,8 @@ const showEditAlert = async (documento, user) => {
       <Autocomplete
         id="tipoRemitente"
         options={opcionesRemitentes}
-        defaultValue={documento.nombre_rem}
+        getOptionLabel={(option) => option.label} // Mostrar el nombre del remitente
+        defaultValue={opcionesRemitentes.find((opt) => opt.label === documento.nombre_rem)} // Establecer valor por defecto
         renderInput={(params) => (
           <TextField {...params} label="Tipo de Remitente" variant="outlined" margin="dense" />
         )}
@@ -107,20 +135,31 @@ const showEditAlert = async (documento, user) => {
     title: 'Editar Documento',
     html: div,
     showCancelButton: true,
-    confirmButtonColor: '#e67e22', // Rojo para el botón de confirmación
+    confirmButtonColor: '#e67e22',
     confirmButtonText: 'Guardar',
     cancelButtonText: 'Cancelar',
     focusConfirm: false,
     preConfirm: () => {
+      // Obtener el objeto Autocomplete para tipo de documento
+      const tipoDocumentoSelect = document.querySelector('#tipoDocumento').value;
+      // Obtener el objeto Autocomplete para tipo de remitente
+      const tipoRemitenteSelect = document.querySelector('#tipoRemitente').value;
+  
+      // Encontrar el documento seleccionado en el arreglo de opcionesDocumentos
+      const documentoSeleccionado = opcionesDocumentos.find(opt => opt.label === tipoDocumentoSelect);
+      // Encontrar el remitente seleccionado en el arreglo de opcionesRemitentes
+      const remitenteSeleccionado = opcionesRemitentes.find(opt => opt.label === tipoRemitenteSelect);
+
       return {
         numeroDocumento: document.getElementById('numeroDocumento').value,
-        fechaEntrada: document.getElementById('fechaEntrada').value,
+        fecha_entrada: document.getElementById('fechaEntrada').value,
         descripcion: document.getElementById('descripcion').value,
-        tipoDocumento: document.querySelector('#tipoDocumento').value,
-        tipoRemitente: document.querySelector('#tipoRemitente').value,
+        id_tipo_documento: documentoSeleccionado ? documentoSeleccionado.key : null, // Obtener el id del documento
+        id_remitente: remitenteSeleccionado ? remitenteSeleccionado.key : null, // Obtener el id del remitente
       };
     },
   });
+  
 };
 
 
@@ -210,7 +249,7 @@ export const useCrud = (url) => {
     const result = await showEditAlert(documento, user);
     if (result.isConfirmed) {
       const datos = { ...documento, ...result.value };
-      const editar_url = 'http://localhost/cdoc-app/api/documents/edit/1';
+      const editar_url = 'http://localhost/cdoc-app/api/documents/edit/'+id;
       try {
         const data = await editDocument(editar_url, user, datos);
         await showAlert('Éxito', 'Documento editado correctamente.', 'success'); // Usa el hook de alertas
