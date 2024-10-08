@@ -118,6 +118,13 @@ class Documents extends Model {
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    public function allRecipients() {
+        $query = "SELECT * FROM destinatarios";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+    
     
     /**
      * Elimina un Usuario por ID.
@@ -126,7 +133,7 @@ class Documents extends Model {
      * @return bool True si la eliminación fue exitosa, false en caso contrario.
      */
     public function delete($id) {
-        $query = "DELETE FROM  $this->table WHERE id = :id";
+        $query = "DELETE FROM  $this->table WHERE id_documento = :id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id);
         return $stmt->execute(); 
@@ -139,7 +146,7 @@ class Documents extends Model {
      * @return bool True si el Usuario existe, false en caso contrario.
      */
     public function byId($id) {
-        $query = "SELECT id FROM  $this->table WHERE id = :id";
+        $query = "SELECT * FROM  $this->table WHERE id_documento = :id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id);
         $stmt->execute();

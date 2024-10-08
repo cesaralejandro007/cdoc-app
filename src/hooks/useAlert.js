@@ -11,6 +11,7 @@ export const useAlert = () => {
       showCancelButton: false, // No mostrar botón de cancelar
       timer: showConfirmButton ? undefined : 2000, // Cierra la alerta automáticamente si no hay botón
       timerProgressBar: true, // Muestra barra de progreso si hay un temporizador
+      confirmButtonColor: '#1E88E5', // Rojo para el botón de confirmación
     });
   };
 
